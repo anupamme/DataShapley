@@ -1,5 +1,5 @@
-%load_ext autoreload
-%autoreload 2
+#%load_ext autoreload
+#%autoreload 2
 import os
 import sys
 import time
@@ -9,13 +9,13 @@ from DShap import DShap
 import matplotlib.pyplot as plt
 import sklearn
 from shap_utils import *
-%matplotlib inline
+#%matplotlib inline
 MEM_DIR = './'
 
 problem, model = 'classification', 'logistic'
 hidden_units = [] # Empty list in the case of logistic regression.
-train_size = 10
-train_total = 100
+train_size = 200
+test_size = 50
 
 d, difficulty = 50, 1
 num_classes = 2
@@ -25,10 +25,8 @@ important_dims = 5
 clf = return_model(model, solver='liblinear', hidden_units=tuple(hidden_units))
 _param = 1.0
 for _ in range(100):
-    import pdb
-    pdb.set_trace()
     X_raw = np.random.multivariate_normal(mean=np.zeros(d), cov = np.eye(d), 
-                                          size=train_size + train_total)
+                                          size=train_size + test_size)
     _, y_raw, _, _ = label_generator(
         problem, X_raw, param = _param,  difficulty = difficulty, important=important_dims)
     clf.fit(X_raw[:train_size], y_raw[:train_size])
@@ -81,4 +79,3 @@ convergence_plots(dshap.marginals_g)
 
 dshap.performance_plots([dshap.vals_tmc, dshap.vals_g, dshap.vals_loo], num_plot_markers=20,
                        sources=dshap.sources)
-

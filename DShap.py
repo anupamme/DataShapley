@@ -7,7 +7,7 @@ import numpy as np
 import os
 import tensorflow as tf
 import sys
-from shap_utils import *
+from shap_utils import return_model, error
 from Shapley import ShapNN
 from scipy.stats import spearmanr
 import shutil
@@ -48,7 +48,6 @@ class DShap(object):
                 scratch
             **kwargs: Arguments of the model
         """
-            
         if seed is not None:
             np.random.seed(seed)
             tf.random.set_random_seed(seed)

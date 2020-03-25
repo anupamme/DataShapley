@@ -25,12 +25,10 @@ import tensorflow as tf
 import matplotlib.pyplot as plt
         
 def convergence_plots(marginals):
-    
     plt.rcParams['figure.figsize'] = 15,15
     for i, idx in enumerate(np.arange(min(25, marginals.shape[-1]))):
         plt.subplot(5,5,i+1)
         plt.plot(np.cumsum(marginals[:, idx])/np.arange(1, len(marginals)+1))    
-        
     
 def is_integer(array):
     return (np.equal(np.mod(array, 1), 0).mean()==1)
@@ -155,7 +153,6 @@ def generate_features(latent, dependency):
 
 
 def label_generator(problem, X, param, difficulty=1, beta=None, important=None):
-        
     if important is None or important > X.shape[-1]:
         important = X.shape[-1]
     dim_latent = sum([important**i for i in range(1, difficulty+1)])
@@ -181,6 +178,9 @@ def label_generator(problem, X, param, difficulty=1, beta=None, important=None):
         y_true = logistic.cdf(param * y_true)
         y = (np.random.random(X.shape[0]) < y_true).astype(int)
     elif problem is 'regression':
+        
+        param_2 = np.random.laplace(0, 0.5, size=len(y_true))
+#        y = y_true + param * np.random.normal(size=len(y_true)) + param_2
         y = y_true + param * np.random.normal(size=len(y_true))
     else:
         raise ValueError('Invalid problem specified!')
